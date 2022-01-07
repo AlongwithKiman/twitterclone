@@ -23,7 +23,9 @@ function App() {
       ) : (
         "initializing ...."
       )}
-      <footer>&copy; 이기만집사 {new Date().getFullYear()}</footer>
+      <footer style={{ fontSize: "1px" }}>
+        &copy; 이기만집사 {new Date().getFullYear()}
+      </footer>
     </>
   );
 }

@@ -6,7 +6,7 @@ function Profile() {
   const navigate = useNavigate();
   const onLogOutClick = () => {
     authService.signOut();
-    navigate("/");
+    navigate("/twitterclone");
   };
   return (
     <>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { authService, dbService } from "fbase";
+import { dbService } from "fbase";
 import {
   addDoc,
   collection,
@@ -56,11 +56,6 @@ function Home({ userObject }) {
     }
   };
 
-  const loadTweets = async () => {
-    const querySnapshot = await getDocs(collection(dbService, "tweets"));
-    console.log(querySnapshot);
-  };
-
   //  setTweets();
   return (
     <div>
@@ -75,7 +70,7 @@ function Home({ userObject }) {
         <input type="submit" value="트윗하기" onClick={onSubmit} />
       </form>
 
-      <button onClick={loadTweets}>load Tweets</button>
+      {/* <button onClick={loadTweets}>load Tweets</button> */}
       {tweets.map((tweet) => (
         <div id={tweet.id}>
           <h4>{tweet.text}</h4>

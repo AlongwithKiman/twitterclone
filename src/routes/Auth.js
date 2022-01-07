@@ -85,9 +85,9 @@ const Auth = () => {
         ></input>
         {error}
       </form>
-      <span onClick={toggleAccount}>
-        {newAccount ? "Log In" : "Create Account"}
-      </span>
+      <button onClick={toggleAccount}>
+        {newAccount ? "로그인할라면 클릭" : "계정 새로 만들라면 클릭"}
+      </button>
       <div>
         <button name="google" onClick={onSocialClick}>
           Continue with Google
