@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/twitterclone/static/js/main.2e1977ca.js",
+    "index.html": "/twitterclone/index.html",
+    "main.2e1977ca.js.map": "/twitterclone/static/js/main.2e1977ca.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.2e1977ca.js"
+  ]
+}
