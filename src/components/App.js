@@ -4,14 +4,12 @@ import { authService } from "fbase";
 
 function App() {
   const [init, setInit] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const [userObject, setUserObject] = useState(null);
   useEffect(() => {}, [
     authService.onAuthStateChanged((user) => {
       setUserObject(user);
       // 감지가 됐다 : 적어도 firebase가 init을 함
-      if (user) setIsLoggedIn(true);
-      else setIsLoggedIn(false);
 
       setInit(true);
     }),
@@ -19,7 +17,7 @@ function App() {
   return (
     <>
       {init ? (
-        <AppRouter isLoggedIn={isLoggedIn} userObject={userObject} />
+        <AppRouter isLoggedIn={Boolean(userObject)} userObject={userObject} />
       ) : (
         "initializing ...."
       )}

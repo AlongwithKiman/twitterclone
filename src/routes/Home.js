@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { dbService } from "fbase";
 import {
   addDoc,
@@ -9,17 +9,19 @@ import {
   orderBy,
   query,
 } from "firebase/firestore";
+import Tweet from "components/Tweet";
+
 function Home({ userObject }) {
   const [tweet, setTweet] = useState("");
   const [tweets, setTweets] = useState([]);
+  const [photoLink, setPhotoLink] = useState(); //  첨부 사진 미리보기 링크
 
-  const getTweets = async () => {
-    const querySnapshot = await getDocs(collection(dbService, "tweets"));
-    querySnapshot.forEach((doc) => {
-      const tweetObject = { ...doc.data(), id: doc.id };
-
-      setTweets((prev) => [...prev, tweetObject]);
-    });
+  const onFileChange = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = (finishedEvent) =>
+      setPhotoLink(finishedEvent.currentTarget.result);
+    reader.readAsDataURL(file);
   };
 
   useEffect(() => {
@@ -29,6 +31,7 @@ function Home({ userObject }) {
       orderBy("createdAt", "desc")
     );
     onSnapshot(q, (snapshot) => {
+      //  디비 실시간 변화를 렌더링해주기 위함.( 스냅샷 )
       const tweetArr = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
@@ -56,6 +59,14 @@ function Home({ userObject }) {
     }
   };
 
+  // for Photo Attachment
+
+  const photoFile = useRef();
+  const clearPhoto = () => {
+    setPhotoLink(null);
+    photoFile.current.value = null;
+  };
+
   //  setTweets();
   return (
     <div>
@@ -67,14 +78,28 @@ function Home({ userObject }) {
           value={tweet}
           onChange={(e) => setTweet(e.target.value)}
         />
+        <input
+          type="file"
+          accept="image/*"
+          onChange={onFileChange}
+          ref={photoFile}
+        />
         <input type="submit" value="트윗하기" onClick={onSubmit} />
+        {photoLink && (
+          <div>
+            <img width="50px" height="50px" src={photoLink}></img>
+            <button onClick={clearPhoto}>업로드 취소</button>
+          </div>
+        )}
       </form>
 
       {/* <button onClick={loadTweets}>load Tweets</button> */}
       {tweets.map((tweet) => (
-        <div id={tweet.id}>
-          <h4>{tweet.text}</h4>
-        </div>
+        <Tweet
+          key={tweet.id}
+          tweetObj={tweet}
+          isOwner={tweet.creatorId === userObject.uid}
+        />
       ))}
     </div>
   );
